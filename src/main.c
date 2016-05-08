@@ -89,7 +89,7 @@ state_t state = STATE_INIT;
 /**
  * Timer 1 overflow count (each is equal to 256us).
  */
-uint16_t oflow = 0;
+uint16_t oflow1 = 0;
 
 /**
  * Number of \e us the \e remote signal was \e high.
@@ -122,7 +122,7 @@ uint32_t cmdBuf = 0;
 /**
  * Sends a single bit on the \e data line followed by a \e clock (high then
  * low, with the radio reading on the low). The operation takes approximately
- * 20us.
+ * 20us (when counting in the call overhead from \c #sendByte()).
  * 
  * \param[in] val bit value
  */
@@ -133,9 +133,9 @@ void sendBit(bool val) {
 		PORTB &= ~_BV(CDC_DAT);
 	}
 	PORTB |=  _BV(CDC_CLK);
-	_delay_us(8);
+	_delay_us(5);
 	PORTB &= ~_BV(CDC_CLK);
-	_delay_us(8);
+	_delay_us(11);
 }
 
 /**
@@ -184,10 +184,20 @@ void sendBytes(struct payload* data) {
 //******************************** Receiving ********************************/
 
 /**
+ * \def APPROX
+ * Compares approximately \a val with \a cmp, give or take 40%. Used to
+ * compare timings where fluctuations are present.
+ * 
+ * \param val \c uint16_t value
+ * \param cmp \c uint16_t to compare with \a val
+ */
+#define APPROX(val, cmp) ((val > (uint16_t) ((cmp * 60UL) / 100U)) && (val < (uint16_t) ((cmp * 140UL) / 100U)))
+
+/**
  * Resets the \e remocon decoder state.
  */
 void resetDecoder() {
-	oflow  = 0;
+	oflow1 = 0;
 	decode = false;
 	cmdBit = 0;
 }
@@ -197,13 +207,13 @@ void resetDecoder() {
  * expected behaviour after 256us).
  */
 ISR(TIMER1_OVF_vect) {
-	oflow++;
+	oflow1++;
 	/*
 	 * If the overflow reached 65ms (i.e. it overflowed 254 times) then the
 	 * decoding state is reset. In use, signals over 20ms are either an error
 	 * or the wait between pulses (which we're not interested in anyway).
 	 */
-	if (oflow >= 254) {
+	if (oflow1 >= 254) {
 		resetDecoder();
 	}
 }
@@ -219,9 +229,8 @@ ISR(INT0_vect) {
 	 * ratio). Any unknown pulses and we reset the decoder.
 	 */
 	if (PINB & _BV(REMOCON)) {
-		remLo = (oflow << 8) + TCNT1;
-		if (remHi > 7200 && remHi < 10800 &&
-			remLo > 3600 && remLo < 5400) {
+		remLo = (oflow1 << 8) + TCNT1;
+		if (APPROX(remHi, 9000) && APPROX(remLo, 4500)) {
 			/*
 			 * Found a 9ms/4.5ms pulse. No matter what is being processed,
 			 * this always signifies a start bit (resetting the decoding
@@ -231,14 +240,14 @@ ISR(INT0_vect) {
 			cmdBit = 0;
 		} else {
 			if (decode) {
-				if (remHi > 480 && remHi < 720) {
-					if (remLo > 480 && remLo < 720) {
+				if (APPROX(remHi, 650)) {
+					if (APPROX(remLo, 1750)) {
 						cmdBuf <<= 1;
+						cmdBuf  |= 1;
 						cmdBit++;
 					} else {
-						if (remLo > 1360 && remLo < 2040) {
+						if (APPROX(remLo, 650)) {
 							cmdBuf <<= 1;
-							cmdBuf  |= 1;
 							cmdBit++;
 						} else {
 							resetDecoder();
@@ -293,10 +302,10 @@ ISR(INT0_vect) {
 			}
 		}
 	} else {
-		remHi = (oflow << 8) + TCNT1;
+		remHi = (oflow1 << 8) + TCNT1;
 	}
-	TCNT1 = 0;
-	oflow = 0;
+	TCNT1  = 0;
+	oflow1 = 0;
 }
 
 //***************************************************************************/
@@ -323,6 +332,8 @@ void _delay(int8_t ms) {
  * sends data anyway (\e select is high when the radio is powered on, and
  * since the radio can't power off without communicating with the CDC, its
  * use can be inferred).
+ * 
+ * \todo the send loops should be timer/state machine driven so the MCU can sleep (then everything is interrupt driven)
  */
 int main(void) {
 	/*
