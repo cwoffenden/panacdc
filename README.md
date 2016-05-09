@@ -7,7 +7,7 @@ The project emulates a Panasonic CX-DP60 CD Changer (CDC), allowing early 1990s 
 
 Without a CDC connected the radio ignores changing to the CD input, hence the need to emulate its presence. This isn't a new idea; others have created emulators for newer CDCs (see [CDCEmu](http://q1.se/cdcemu/), [VAG CDC Faker](http://dev.shyd.de/2013/09/avr-raspberry-pi-vw-beta-vag-cdc-faker/), etc.) but these don't work with older radios.
 
-I started by looking at the DP60's schematics (actually, I started with CDCEmu, which didn't work, so I rolled up my sleves and did this) and recording the traffic with a [Saleae Logic](https://www.saleae.com/). The radio's remote commands look to be using a variant of the [NEC protocol](https://www.vishay.com/docs/80071/dataform.pdf) whereas the CDC's data is a byte orientated synchronous serial stream:
+I started by looking at the [DP60's schematics](https://raw.githubusercontent.com/cwoffenden/panacdc/master/doc/schematic.pdf) (actually, I started with CDCEmu, which didn't work, so I rolled up my sleves and did this) and recording the traffic with a [Saleae Logic](https://www.saleae.com/). The radio's remote commands look to be using a variant of the [NEC protocol](https://www.vishay.com/docs/80071/dataform.pdf) whereas the CDC's data is a byte orientated synchronous serial stream:
 ![NEC-like remote data](https://raw.githubusercontent.com/cwoffenden/panacdc/master/doc/logic-1.png)
 (Close-up [here](https://raw.githubusercontent.com/cwoffenden/panacdc/master/doc/logic-2.png), with Logic files [here](https://github.com/cwoffenden/panacdc/raw/master/doc/cd-radio-off.logicdata))
 

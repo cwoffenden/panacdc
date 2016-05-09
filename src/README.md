@@ -1,0 +1,1 @@
+Project source code for [Atmel Studio](http://www.atmel.com/tools/ATMELSTUDIO.aspx). The project file is for 6.2 but should work in newer versions.

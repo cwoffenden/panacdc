@@ -1,22 +1,30 @@
+/**
+ * \file main.c
+ * CX-DP60 emulator for ATtiny85.
+ */
 #define F_CPU 8000000UL
 
 #include <stdbool.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-/*
+/**
+ * \def CDC_DAT
  * 8-pin DIN pin 1 (\e data from CDC).
  */
 #define CDC_DAT PB0
-/*
+/**
+ * \def CDC_CLK
  * 8-pin DIN pin 2 (\e clock from CDC).
  */
 #define CDC_CLK PB1
-/*
+/**
+ * \def CDC_STB
  * 8-pin DIN pin 4 (\e strobe from CDC).
  */
 #define CDC_STB PB3
-/*
+/**
+ * \def REMOCON
  * 8-pin DIN pin 5 (\e remocon from radio).
  */
 #define REMOCON PB2
