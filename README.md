@@ -1,4 +1,3 @@
-# panacdc
 Panasonic CX-DP60 Emulator
 ==========================
 
@@ -12,6 +11,6 @@ I started by looking at the DP60's schematics (actually, I started with CDCEmu, 
 ![NEC-like remote data](https://raw.githubusercontent.com/cwoffenden/panacdc/master/doc/logic-1.png)
 (Close-up [here](https://raw.githubusercontent.com/cwoffenden/panacdc/master/doc/logic-2.png), with Logic files [here](https://github.com/cwoffenden/panacdc/raw/master/doc/cd-radio-off.logicdata))
 
-It's not necessary to understand or fully decode the communication, just to recognise and replay. The documented source and schematic are available above, but for anyone wishing to simply build it, it's enough to order a PCB (either from the [Eagle schematics](https://github.com/cwoffenden/panacdc/tree/master/pcb), the resulting [Gerbers](https://github.com/cwoffenden/panacdc/raw/master/out/board.zip), or direct from [OSH Park](https://oshpark.com/shared_projects/Xu28lOTu)) and program the flash (via the ISP connector on the board using the [prebuilt firmware](https://github.com/cwoffenden/panacdc/blob/master/out/flash.elf)).
+It's not necessary to understand or fully decode the communication, just to recognise and replay. The documented source and schematic are available above, but for anyone wishing to simply build it, it's enough to order a PCB (either from the [Eagle schematics](https://github.com/cwoffenden/panacdc/tree/master/pcb), the resulting [Gerbers](https://github.com/cwoffenden/panacdc/raw/master/out/board.zip), or direct from [OSH Park](https://oshpark.com/shared_projects/Xu28lOTu)) and program the flash (via the ISP connector on the board using the [prebuilt firmware](https://github.com/cwoffenden/panacdc/blob/master/out/flash.elf)). It was designed to be built with nothing more than a regular soldering iron.
 
 Parts can be ordered from [Farnell](http://www.farnell.com/), [Mouser](http://www.mouser.com/) or any other componment supplier (the BOM is available [here](https://github.com/cwoffenden/panacdc/blob/master/out/parts.csv)). The finished project has a USB connector to power a Bluetooth or DLNA receiver (tested with an [Arcam miniBlink](http://www.arcam.co.uk/mini.htm)). A [conformal coating](https://raw.githubusercontent.com/cwoffenden/panacdc/master/doc/board.jpeg) was added to protect the board from any moisture.
