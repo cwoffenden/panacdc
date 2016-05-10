@@ -350,8 +350,7 @@ int main(void) {
 	_delay_ms(100);
 	/*
 	 * Data, clock and strobe as output, set high. Remote as input, tri-state
-	 * (this was externally strongly pulled low but the radio couldn't drive
-	 * it; weakly pulled low was noisy). Remaining ports pulled high (inc. PB4
+	 * (externally weakly pulled low). Remaining ports pulled high (inc. PB4
 	 * which is disconnected).
 	 */
 	DDRB  =  _BV(CDC_DAT)
