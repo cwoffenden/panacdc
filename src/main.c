@@ -294,7 +294,7 @@ ISR(INT0_vect) {
 									break;
 								default:
 									/*
-									 * We leave the current state.
+									 * Maintain the current state.
 									 */
 									break;
 								}
