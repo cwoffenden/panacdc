@@ -1,7 +1,7 @@
 Panasonic CX-DP60 Emulator
 ==========================
 
-The project emulates a Panasonic CX-DP60 CD Changer (CDC), allowing early 1990s car radios to use the CD inputs as an auxilary. Tested with a Panasonic CQ-LR2450A (from an MG RV8) but should work with others from the same era.
+The project is a combination of hardware and software to emulate a Panasonic CX-DP60 CD Changer (CDC), allowing early 1990s car radios to use the CD inputs as an auxilary. Tested with a Panasonic CQ-LR2450A (from an MG RV8) but should work with others from the same era.
 
 ![Finished unit](https://raw.githubusercontent.com/cwoffenden/panacdc/master/doc/radio.jpeg)
 
